@@ -1,0 +1,50 @@
+#N canvas 115 117 1134 394 10;
+#X declare -lib mrpeach;
+#X obj 14 19 import mrpeach;
+#X obj 394 73 leaf-node 1;
+#X obj 195 -7 cnv 15 180 340 empty empty empty 20 12 0 14 -261234 -66577
+0;
+#X text 200 -5 all nodes;
+#N canvas 813 320 450 300 global-control 1;
+#X obj 111 134 vsl 10 100 0 15000 0 0 empty empty freq 0 -9 0 10 -262144
+-1 -1 1300 1;
+#X obj 144 135 vsl 10 100 50 1500 0 0 empty empty dlay 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 102 274 s gfreq;
+#X obj 169 267 s gdelay;
+#X floatatom 103 246 5 0 0 0 - - -;
+#X floatatom 136 246 5 0 0 0 - - -;
+#X connect 0 0 4 0;
+#X connect 1 0 5 0;
+#X connect 4 0 2 0;
+#X connect 5 0 3 0;
+#X coords 0 -1 1 1 70 165 1 100 100;
+#X restore 212 141 pd global-control;
+#X obj 211 16 leaf-node 0;
+#X obj 537 73 leaf-node 2;
+#X obj 680 73 leaf-node 3;
+#X obj 823 73 leaf-node 4;
+#X obj 966 73 leaf-node 5;
+#X obj 966 224 leaf-node 6;
+#X obj 823 224 leaf-node 7;
+#X obj 680 224 leaf-node 8;
+#X obj 537 224 leaf-node 9;
+#X obj 394 224 leaf-node 10;
+#X obj 9 133 cnv 15 170 200 empty empty empty 20 12 0 14 -232576 -66577
+0;
+#X obj 17 303 udpsend;
+#X msg 26 224 disconnect;
+#X msg 17 202 connect localhost 2222;
+#X obj 45 249 r msg;
+#X obj 45 271 packOSC;
+#X obj 100 248 r msg2;
+#X obj 100 271 packOSC;
+#X obj 17 179 loadbang;
+#X text 14 145 connect to broker node;
+#X connect 17 0 16 0;
+#X connect 18 0 16 0;
+#X connect 19 0 20 0;
+#X connect 20 0 16 0;
+#X connect 21 0 22 0;
+#X connect 22 0 16 0;
+#X connect 23 0 18 0;

@@ -1,0 +1,65 @@
+#N canvas 665 260 509 420 10;
+#X obj 7 129 metro 3000;
+#X obj 119 136 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 161 130 vsl 10 54 100 12000 0 0 empty empty freq 0 -9 0 10 -262144
+-1 -1 833 1;
+#X obj 196 130 vsl 10 54 50 1500 0 0 empty empty delay 0 -9 0 10 -262144
+-1 -1 214 1;
+#X obj 344 202 del;
+#X floatatom 359 178 5 0 0 0 - - -;
+#X obj 294 143 t b;
+#X obj 294 167 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 344 303 s msg2;
+#X obj 120 184 bng 15 250 50 0 /knock empty off 17 7 0 10 -262144 -1
+-1;
+#X obj 120 164 bng 15 250 50 0 /knock empty on 17 7 0 10 -262144 -1
+-1;
+#X obj 22 214 t b;
+#X obj 359 281 t b;
+#X floatatom 161 190 5 0 0 0 - - -;
+#X floatatom 196 190 5 0 0 0 - - -;
+#X obj 131 215 hradio 8 1 0 10 empty empty empty 0 -8 0 10 -262144
+-1 -1 0;
+#X floatatom 131 262 5 0 0 0 - - -;
+#X obj 131 236 + 1;
+#X msg 7 183 send /knock \$1 1;
+#X msg 344 252 send /knock \$1 0;
+#X floatatom 291 80 5 0 0 0 - - -;
+#X obj 291 27 loadbang;
+#X obj 291 53 f \$1;
+#X obj 7 156 f \$1;
+#X obj 344 227 f \$1;
+#X obj 294 121 r \$0-msg;
+#X obj 7 238 s \$0-msg;
+#X obj -4 263 s msg;
+#X obj 161 52 r gfreq;
+#X obj 196 75 r gdelay;
+#X connect 0 0 23 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;
+#X connect 2 0 13 0;
+#X connect 3 0 5 0;
+#X connect 3 0 14 0;
+#X connect 4 0 24 0;
+#X connect 5 0 4 1;
+#X connect 6 0 7 0;
+#X connect 7 0 4 0;
+#X connect 11 0 10 0;
+#X connect 12 0 9 0;
+#X connect 15 0 17 0;
+#X connect 17 0 16 0;
+#X connect 18 0 11 0;
+#X connect 18 0 26 0;
+#X connect 18 0 27 0;
+#X connect 19 0 8 0;
+#X connect 19 0 12 0;
+#X connect 21 0 22 0;
+#X connect 22 0 20 0;
+#X connect 23 0 18 0;
+#X connect 24 0 19 0;
+#X connect 25 0 6 0;
+#X connect 28 0 2 0;
+#X connect 29 0 3 0;
+#X coords 0 0 1 1 140 110 1 100 100;
