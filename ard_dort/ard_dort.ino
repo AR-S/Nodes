@@ -1,10 +1,5 @@
-// nRF24 wiring.
-//     CE       -> 9
-//     SS       -> 10
-//     MOSI     -> 11
-//     MISO     -> 12
-//     SCK      -> 13
 #include <SPI.h>
+#include <Metro.h>
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
@@ -13,16 +8,12 @@
 ////#define LEAF
 //#define ROOT
 
-byte this_node_addr = 2;
+byte this_node_addr = 4;
 
 // PIN configuration
 int outPin = 8;
 int ledPin = 7;
 
-long framenr = 0;
-
-char field_separator   = ' ';
-char command_separator = ';';
 
 enum {
   kNone = 255,
@@ -30,7 +21,19 @@ enum {
   kDisable = 0
 };
 
-// Attach a new CmdMessenger object to the default Serial port
+enum {
+  stWAITING,
+  stRUNNING
+};
+
+int state;
+
+long framenr = 0;
+
+char field_separator   = ' ';
+char command_separator = ';';
+
+// attach a new CmdMessenger object to the default Serial port
 CmdMessenger cmdMessenger = CmdMessenger(Serial, field_separator, command_separator);
 
 // RADIO setup
@@ -38,9 +41,15 @@ CmdMessenger cmdMessenger = CmdMessenger(Serial, field_separator, command_separa
 RF24 radio(9,10);
 const uint64_t pipes[2] = {0x65646f4e32LL,0x65646f4e31LL};
 
-// Set up roles to simplify testing
+// Set up roles to simplify testing 
 boolean role;                           // The main role variable, holds the current role identifier
 boolean role_root = 1, role_leaf = 0;   // The two different roles.
+
+Metro ledmetro = Metro(75); // blinker
+Metro solmetro = Metro(500);
+
+int ledState = LOW;
+int solState = LOW;
 
 struct Payload {
   byte from;
@@ -93,11 +102,13 @@ void attachCommandCallbacks() {
 void setup(void) {
   Serial.begin(57600);
 
+  state = stWAITING;
+
   printf_begin();
 
   cmdMessenger.printLfCr();
   attachCommandCallbacks();
-
+  
   // pin config
   pinMode(outPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
@@ -114,13 +125,19 @@ void setup(void) {
 
   set_leaf_mode();
   //set_root_mode();
-
+  
   radio.startListening();
   radio.printDetails();
   radio.powerUp();
 };
 
 void process_payload() {
+    // if we were waiting, change state and fix led
+    if(state == stWAITING) {
+      state = stRUNNING;
+      ledState = HIGH;
+    }
+
     Serial.println("[RX] ");
     Serial.print("   FROM=");
     Serial.print(payload.from);
@@ -134,11 +151,10 @@ void process_payload() {
 
     // react on command by changing state of pin
     if(payload.state == 1) {
-        digitalWrite(outPin, HIGH);
-        delay(200);
-        digitalWrite(outPin, LOW);
+        solState = HIGH;
+        solmetro.reset(); 
     } else {
-      digitalWrite(outPin , LOW);
+      solState = LOW;
     }
 }
 
@@ -176,27 +192,27 @@ void root_send_message(uint8_t dstnode, uint8_t state) {
   Serial.print(" STAT=");
   Serial.print(payload.state);
   Serial.println();
-
+  
   // dispatch message
   radio.stopListening();
-  delay(10);
+  delay(5);
   bool ok = radio.write( &payload, sizeof(Payload) );
   if(!ok) { Serial.println("send failed"); }
-  delay(10);
-  radio.startListening();
-  delay(1000);
+  delay(5);
+  radio.startListening(); 
 }
 
-void root_loop() {
+void root_test_loop() {
   if(payload.to > 3) {
     payload.to = 0;
   } else {
     payload.to++;
   }
-
+    
   if(payload.state == 0) { payload.state = 1; } else { payload.state = 0; }
 
   root_send_message(payload.to, payload.state);
+  delay(1000); 
 }
 
 void set_leaf_mode() {
@@ -213,24 +229,33 @@ void set_root_mode() {
 }
 
 void loop() {
+  if((state == stWAITING) && (ledmetro.check() == 1) ) {
+    ledState = (ledState == LOW) ? HIGH : LOW;
+  }
+  digitalWrite(ledPin, ledState);
+  
   // determine which loop to run
   if(role == role_leaf) {
     leaf_loop();
   } else if (role == role_root) {
     // Process incoming serial data, and perform callbacks
     cmdMessenger.feedinSerialData();
-    //root_loop();
+    //root_test_loop();
   } else {
     Serial.println("undefined role for this node");
   }
 
-  // we are online, light LED
-  digitalWrite(ledPin, HIGH);
+  // prevent the solenoid from staying on for too long
+  if( (solState == HIGH) && (solmetro.check() == 1) ) {
+    solState = LOW;
+  }
+  digitalWrite(outPin, solState);
+
 /*
   // check for any incoming serial data
   if ( Serial.available() )
   {
-    char c = toupper(Serial.read());
+    char c = toupper(Serial.read());    
     if ( (c == 'R') && (role == role_leaf) )
     {
       Serial.println("*** Changing to ROOT role -- PRESS 'L' TO SWITCH BACK\n\r");
@@ -238,7 +263,7 @@ void loop() {
     }
     else if ( (c == 'L') && (role == role_root) )
     {
-      Serial.println("*** Changing to LEAF role -- PRESS 'R' TO SWITCH BACK\n\r");
+      Serial.println("*** Changing to LEAF role -- PRESS 'R' TO SWITCH BACK\n\r");  
       set_leaf_mode();
     }
   } // if serial available
