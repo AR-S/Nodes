@@ -52,7 +52,7 @@ def main():
             print "(!!!) Couldn't find any Arduino. Please plug one to continue."
             sys.exit(2)
 
-        devard = [0]  # get first found
+        devard = ards[0]  # get first found
         print "Opening arduino at", devard
         ard = serial.Serial(devard, 57600)
 
@@ -73,7 +73,7 @@ def main():
             # wait forever
             while True:
                 #print "boo!"
-                out_test()
+                #out_test()
                 time.sleep(1)
 
         except KeyboardInterrupt, e:
