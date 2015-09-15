@@ -5,9 +5,8 @@
 #include "printf.h"
 #include <CmdMessenger.h>  // CmdMessenger
 
-////#define LEAF
-//#define ROOT
-
+// !!!!!!!!!!!!!!!!!!!!!
+// @CHANGEME: change the value of this variable to change the node address
 byte this_node_addr = 4;
 
 // PIN configuration
@@ -37,11 +36,12 @@ char command_separator = ';';
 CmdMessenger cmdMessenger = CmdMessenger(Serial, field_separator, command_separator);
 
 // RADIO setup
-// Pin 9 is CE and 10 CSN/SS
+// pin 9 is CE and 10 CSN/SS
 RF24 radio(9,10);
+// read/write channel identifiers
 const uint64_t pipes[2] = {0x65646f4e32LL,0x65646f4e31LL};
 
-// Set up roles to simplify testing 
+// set up roles to simplify testing 
 boolean role;                           // The main role variable, holds the current role identifier
 boolean role_root = 1, role_leaf = 0;   // The two different roles.
 
@@ -195,10 +195,9 @@ void root_send_message(uint8_t dstnode, uint8_t state) {
   
   // dispatch message
   radio.stopListening();
-  delay(5);
+  delay(5); // give the radio a (small) chance
   bool ok = radio.write( &payload, sizeof(Payload) );
   if(!ok) { Serial.println("send failed"); }
-  delay(5);
   radio.startListening(); 
 }
 
