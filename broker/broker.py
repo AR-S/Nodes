@@ -47,18 +47,24 @@ def main():
     rx = None
 
     try:
-        devard = find_arduinos()[0]  # get first found
+        ards = find_arduinos()
+        if len(ards) == 0:
+            print "(!!!) Couldn't find any Arduino. Please plug one to continue."
+            sys.exit(2)
+
+        devard = [0]  # get first found
         print "Opening arduino at", devard
         ard = serial.Serial(devard, 57600)
+
+        rx = OSCServer(listen_address)
+        rx.addDefaultHandlers()
+        rx.addMsgHandler("/knock", cb_bell)
+
+        print "Registered Callback-functions:"
+        for addr in rx.getOSCAddressSpace():
+            print addr
+
         try:
-            rx = OSCServer(listen_address)
-            rx.addDefaultHandlers()
-            rx.addMsgHandler("/knock", cb_bell)
-
-            print "Registered Callback-functions:"
-            for addr in rx.getOSCAddressSpace():
-                print addr
-
             print "\nStarting OSCServer. Use ctrl-C to quit."
             st = threading.Thread(target=rx.serve_forever)
             st.thread = True
@@ -71,16 +77,18 @@ def main():
                 time.sleep(1)
 
         except KeyboardInterrupt, e:
-            #rx.close() # stop osc server
+            rx.close() # stop osc server
             print "Good bye!"
 
     except OSError as e:
-        print "(!!!) Failed to open serial pipe, maybe ARDUINO isn't plugged?"
+        print "(!!!) Failed to open serial pipe. Something's fucky with that Arduino..."
     finally:
         if ard:
             ard.flush()
             ard.close()
 
 if __name__ == '__main__':
-    print "\nUse ctrl-C to quit."
+    print "OSC to Serial message broker."
+    print "(cc) 2015 Luis Rodil-Fernandez <root@derfunke.net>."
+    print
     main()
