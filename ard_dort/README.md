@@ -1,6 +1,7 @@
 ## Wiring the nRF24L01 radio module
 
-||nRF24||nano||
+| nRF24 | nano|
+|:------|:---:|
 |CE     |   9 |
 |SS     |  10 |
 |MOSI   |  11 |
