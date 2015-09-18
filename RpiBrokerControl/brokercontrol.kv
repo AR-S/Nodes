@@ -1,0 +1,82 @@
+<BrokerSplash>:
+    AnchorLayout:
+        Image:
+            size: 320, 200
+            source: 'img/ars-black.jpg'
+
+#        BoxLayout:
+#            size: 320, 200
+#            spacing: 10
+#            orientation: 'vertical'
+
+
+#            BoxLayout:
+#                spacing: 10
+#                Button:
+#                    text: 'Connect'
+#                    size_hint_y: None
+#                    height: 50
+#                    on_release: root.app.do_connect()
+#                Button:
+#                    text: 'Configure'
+#                    size_hint_y: None
+#                    height: 50
+#                    on_release: root.app.open_settings()
+
+<GridLayout>:
+    canvas:
+        Color:
+            rgba: (0, 0, 0, .2)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<BrokerControlButton>:
+    canvas.after:
+        Color:
+            rgba: (1, 1, 1, self.highlight)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<BrokerControlMain>:
+    grid_left: grid_left
+    grid: grid
+
+    GridLayout:
+        spacing: 10
+        padding: 4
+        cols: 2
+        rows: 1
+
+        BoxLayout:
+            id: grid_left
+            orientation: 'vertical'
+            spacing: 40
+            padding: 10
+            size_hint_x: None
+            width: 100
+            Button:
+                text: 'All of them'
+                size_hint_y: None
+                height: 60
+                background_color: (0.8, 0.6, 0, 1)
+            Button:
+                text: 'PLAY'
+                size_hint_y: None
+                height: 60
+                background_color: (0.8, 0.0, 0, 1)
+            Button:
+                text: 'Configure'
+                size_hint_y: None
+                height: 60
+                on_release: root.app.open_settings()
+
+        GridLayout:
+            id: grid
+            padding: 40
+            rows: 2
+            spacing: 10
+            #row_force_default: True
+            #row_default_height: 80
+            #size_hint_y: 0.5 * root.width / float(root.height)
