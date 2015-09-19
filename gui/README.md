@@ -2,7 +2,7 @@
 
 You will need PureData's **pd-extended** to run this GUI.
 
-![main window][./main-gui.png]
+![main window](main-gui.png)
 
 Once you have **pd-extended**, start it up, go to `File > Open...` and select the file in this directory named `main.pd`. Ignore all the other files, they are only there to serve as support for `main.pd`.
 
