@@ -27,9 +27,9 @@ The python script will start listening on port 2222 on the localhost.
 ## Troubleshooting
 Some problems and how to fix them.
 
-#### I can run the broker.py but when I try to connect from the puredata sketch it fails with this message *error: udpsend: not connected*.
+###### I can run the broker.py but when I try to connect from the puredata sketch it fails with this message *error: udpsend: not connected*.
 This means that the network connection between the puredata GUI and the broker.py script couldn't be opened. This is almost certainly the IP number. Check that the "connect" message in the puredata GUI, says: *"connect localhost 2222"*. And verify that the python script is also listening on that address/port. Open the script with a plain text editor and go to the line that reads `listen_address = (‘localhost', 2222)` and make sure it has the word "localhost" in it instead of an IP address.
 
-#### How do I find my IP address?
+###### How do I find my IP address?
 
 If you are on OSX, you can open a tool called "Network Utility" and you can see your IP there.
