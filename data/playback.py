@@ -10,6 +10,7 @@ import datetime, time
 from pprint import pprint
 import logging
 import math
+import serial
 
 NODES = []
 FRAME_NR = 0
@@ -29,7 +30,8 @@ def knock(idx, stat):
     global ard, FRAME_NR
     if ard:
         cmd = "{0} {1} {2};\r\n".format(stat, idx, FRAME_NR)
-        logging.debug("sending: {0}".format(cmd))
+        logging.debug("{0} {1} {2};\r\n".format(stat, idx, FRAME_NR))
+        #logging.debug("sending: {0}".format(cmd))
         # cmd:on/off  node  frame
         ard.write(cmd)
         FRAME_NR += 1
@@ -149,6 +151,9 @@ class LeafNode:
         if ((current - self.last) > self.metronome):
             self.last = current
             self.current_index += 1
+            if(self.current_index > len(self.quotes)):
+                logging.warning("RESETTING COUNTER")
+                self.current_index = 0
             current_close = self.quotes[self.current_index][4]
             diff = math.fabs(current_close - self.last_quote)
             logging.info("{0} valued at {1}, change {2}".format(self.ticker, current_close, diff))
@@ -171,15 +176,16 @@ def main():
 
 
     try:
-        # # find arduino and connect to it
-        # ards = find_arduinos()
-        # if len(ards) == 0:
-        #     logging.critical("(!!!) Couldn't find any Arduino. Please plug one to continue.")
-        #     sys.exit(2)
-        #
-        # devard = ards[0]  # get first found
-        # logging.info("Opening arduino at {0}".format(devard))
-        # ard = serial.Serial(devard, 57600)
+        # find arduino and connect to it
+        ards = find_arduinos()
+        print ards
+        if len(ards) == 0:
+            logging.critical("(!!!) Couldn't find any Arduino. Please plug one to continue.")
+            sys.exit(2)
+
+        devard = ards[0]  # get first found
+        logging.info("Opening arduino at {0}".format(devard))
+        ard = serial.Serial(devard, 57600)
 
         try:
             pass
@@ -201,7 +207,11 @@ def main():
             ard.close()
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%d.%m.%Y %I:%M:%S %p', level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)s %(message)s',
+                        datefmt='%d.%m.%Y %I:%M:%S %p',
+                        level=logging.DEBUG,
+                        filename='playback.log',
+                        filemode='w')
     print "Stock market playback machine."
     print "(cc) 2015 Luis Rodil-Fernandez <root@derfunke.net>."
     print
