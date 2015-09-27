@@ -1,0 +1,15 @@
+{
+  "playback_point" : "2008-11-03",
+  "mapping": [
+    {"node": 1, "datafile": "KRX_009540.json", "metronome" : "12000", "hammer" : 850},
+    {"node": 2, "datafile": "KRX_010140.json", "metronome" : "6600", "hammer" : 850},
+    {"node": 3, "datafile": "KRX_010620.json", "metronome" : "23000", "hammer" : 850},
+    {"node": 4, "datafile": "KRX_042660.json", "metronome" : "45000", "hammer" : 850},
+    {"node": 5, "datafile": "KRX_067250.json", "metronome" : "9500", "hammer" : 850},
+    {"node": 6, "datafile": "PINK_YSHLF.json", "metronome" : "14000", "hammer" : 850},
+    {"node": 7, "datafile": "KRX_009540.json", "metronome" : "34000", "hammer" : 850},
+    {"node": 8, "datafile": "KRX_067250.json", "metronome" : "8800", "hammer" : 850},
+    {"node": 9, "datafile": "KRX_010620.json", "metronome" : "10000", "hammer" : 850},
+    {"node": 10, "datafile": "PINK_YSHLF.json", "metronome" : "12300", "hammer" : 850}
+  ]
+}
