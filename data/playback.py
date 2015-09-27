@@ -30,7 +30,7 @@ def knock(idx, stat):
     global ard, FRAME_NR
     if ard:
         cmd = "{0} {1} {2};\r\n".format(stat, idx, FRAME_NR)
-        logging.debug("{0} {1} {2};\r\n".format(stat, idx, FRAME_NR))
+        logging.debug("{0} {1} {2};".format(stat, idx, FRAME_NR))
         #logging.debug("sending: {0}".format(cmd))
         # cmd:on/off  node  frame
         ard.write(cmd)
@@ -177,15 +177,15 @@ def main():
 
     try:
         # find arduino and connect to it
-        ards = find_arduinos()
-        print ards
-        if len(ards) == 0:
-            logging.critical("(!!!) Couldn't find any Arduino. Please plug one to continue.")
-            sys.exit(2)
-
-        devard = ards[0]  # get first found
-        logging.info("Opening arduino at {0}".format(devard))
-        ard = serial.Serial(devard, 57600)
+        # ards = find_arduinos()
+        # print ards
+        # if len(ards) == 0:
+        #     logging.critical("(!!!) Couldn't find any Arduino. Please plug one to continue.")
+        #     sys.exit(2)
+        #
+        # devard = ards[0]  # get first found
+        # logging.info("Opening arduino at {0}".format(devard))
+        # ard = serial.Serial(devard, 57600)
 
         try:
             pass
@@ -207,12 +207,19 @@ def main():
             ard.close()
 
 if __name__ == '__main__':
+
     logging.basicConfig(format='%(asctime)s %(message)s',
                         datefmt='%d.%m.%Y %I:%M:%S %p',
-                        level=logging.DEBUG,
-                        filename='playback.log',
-                        filemode='w')
-    print "Stock market playback machine."
+                        level=logging.DEBUG)
+
+    # logger = logging.getLogger('')
+    #
+    # file_log_handler = logging.FileHandler('playback.log')
+    # logger.addHandler(file_log_handler)
+    # stderr_log_handler = logging.StreamHandler()
+    # logger.addHandler(stderr_log_handler)
+
+    print "Stock quote data playback machine."
     print "(cc) 2015 Luis Rodil-Fernandez <root@derfunke.net>."
     print
     main()
