@@ -145,20 +145,23 @@ class LeafNode:
             self.hammer_sent = True
 
     def update(self):
-        current = get_millis()
-        self.update_hammer()
-        #print (current - self.last)
-        if ((current - self.last) > self.metronome):
-            self.last = current
-            self.current_index += 1
-            if(self.current_index > len(self.quotes)):
-                logging.warning("RESETTING COUNTER")
-                self.current_index = 0
-            current_close = self.quotes[self.current_index][4]
-            diff = math.fabs(current_close - self.last_quote)
-            logging.info("{0} valued at {1}, change {2}".format(self.ticker, current_close, diff))
-            self.last_quote = current_close
-            self.hammer_hit()
+        try:
+            current = get_millis()
+            self.update_hammer()
+            #print (current - self.last)
+            if ((current - self.last) > self.metronome):
+                self.last = current
+                self.current_index += 1
+                if(self.current_index > len(self.quotes)):
+                    logging.warning("RESETTING COUNTER")
+                    self.current_index = 0
+                current_close = self.quotes[self.current_index][4]
+                diff = math.fabs(current_close - self.last_quote)
+                logging.info("{0} valued at {1}, change {2}".format(self.ticker, current_close, diff))
+                self.last_quote = current_close
+                self.hammer_hit()
+        except Exception, e:
+            logging.error("Skipped faulty quote...")
 
 
 def main():
@@ -177,15 +180,15 @@ def main():
 
     try:
         # find arduino and connect to it
-        # ards = find_arduinos()
-        # print ards
-        # if len(ards) == 0:
-        #     logging.critical("(!!!) Couldn't find any Arduino. Please plug one to continue.")
-        #     sys.exit(2)
-        #
-        # devard = ards[0]  # get first found
-        # logging.info("Opening arduino at {0}".format(devard))
-        # ard = serial.Serial(devard, 57600)
+        ards = find_arduinos()
+        print ards
+        if len(ards) == 0:
+            logging.critical("(!!!) Couldn't find any Arduino. Please plug one to continue.")
+            sys.exit(2)
+
+        devard = ards[0]  # get first found
+        logging.info("Opening arduino at {0}".format(devard))
+        ard = serial.Serial(devard, 57600)
 
         try:
             pass
@@ -194,7 +197,10 @@ def main():
             while 1:
                 # update the time loop in each node
                 for n in NODES:
-                    n.update()
+                    try:
+                        n.update()
+                    except IndexOutOfRangeException, e:
+                        pass
                 time.sleep(0.01)
         except KeyboardInterrupt, e:
             print "Good bye!"
