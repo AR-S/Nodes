@@ -9,3 +9,5 @@ This file has a format like:
 Where the date and time is YYYY-MM-DD HH:MM:SS
 And the IP address of the clicker is the second field in the line.
 Fields are separated by a comma.
+
+To run the poll script, just type `python poll.py` in the command line, at the directory where the script is located.
