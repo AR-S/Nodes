@@ -85,6 +85,8 @@ function create_token()
 
 function add_click()
 {
+	/*
+	// Bruno's original
 	$filename = 'lastclicks.txt';
 	$handle = @fopen($filename, 'ab');
 
@@ -100,16 +102,23 @@ function add_click()
 	fclose($handle);
 
 	return true;
-}
+	*/
+
+	// Luis' messing stuff up with the intention of triggering Arduino
+	$out = system("nodebang", $retval);
+	if($retval != 0) {
+		error_log("(!!!) something went wrong calling nodebang: ".$out);
+	}
+} // add_click
 
 function get_user_ip_address()
 {
 	if( ! isset($_SERVER['HTTP_X_FORWARDED_FOR']) )
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = "";
-	
+
 	if( ! isset($_SERVER['HTTP_CLIENT_IP']) )
 		$_SERVER['HTTP_CLIENT_IP'] = "";
-	
+
 	$ip_data = array
 	(
 		$_SERVER['HTTP_X_FORWARDED_FOR'],
@@ -119,7 +128,7 @@ function get_user_ip_address()
 		$_SERVER['REMOTE_ADDR'],
 		getenv('REMOTE_ADDR'),
 	);
-	
+
 	foreach($ip_data as $ip)
 	{
 		if( !empty($ip) && '192' != substr($ip, 0, 3) && '127' != substr($ip, 0, 3) )
@@ -128,11 +137,11 @@ function get_user_ip_address()
 			break;
 		}
 	}
-	
+
 	if( !isset($ip_address) ) {
 		return '0.0.0.0';
 	}
-	
+
 	return $ip_address;
 }
 
@@ -168,7 +177,7 @@ function get_user_ip_address()
 			transition: all 0.5s;
 			outline: none;
 		}
-	
+
 		#butttton:hover
 		{
 			width: 220px;
