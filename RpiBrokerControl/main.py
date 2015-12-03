@@ -12,7 +12,6 @@ from kivy.clock import Clock
 
 from simpleOSC import initOSCClient, initOSCServer, closeOSC, \
         setOSCHandler, sendOSCMsg
-import pygame.midi
 
 
 class BrokerControlButton(Button):
@@ -135,10 +134,10 @@ class BrokerControlApp(App):
     def build_settings(self, settings):
         data = '''[
             { "type": "title", "title": "Arduino Configuration" },
-            { "type": "options", 
+            { "type": "options",
               "title": "Device",
               "desc": "Path to Arduino device resource",
-              "section": "arduino", 
+              "section": "arduino",
               "options": ["/dev/ttyUSB0", "/dev/wchusb0AE03", "/dev/tty.usba223a"],
               "key": "device" },
 
