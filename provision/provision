@@ -27,6 +27,11 @@ echo "Stopping nginx..."
 service nginx stop
 unlink /etc/nginx/sites-enabled/default
 
+echo "Deploying 'butttton'..."
+mkdir /var/www
+chown www-data:www-data /var/www
+install -v -C --owner=www-data --mode=ug+rw ../www/index.php /var/www/index.php
+
 echo "Configuring default site..."
 install -v -C --owner=root --mode=uga+rwx ../bin/nodebang.py /usr/local/bin/nodebang
 install -v -C --mode=u+rw etc/nginx/butttton.conf /etc/nginx/sites-available/butttton
