@@ -31,6 +31,12 @@ echo "Configuring default site..."
 install -v -C --owner=root --mode=u+rwx ../banger/bang.py /usr/local/bin/bang
 install -v -C --mode=u+rw etc/nginx/butttton.conf /etc/nginx/sites-available/butttton
 
+echo "Enable 'butttton' site online..."
+ln -s /etc/nginx/sites-available/butttton /etc/nginx/sites-enabled/
+
+echo "Allow web server user to open serial port for comms with Arduinos and stuff"
+usermod -a -G dialout www-data
+
 echo "Restarting services..."
 service php5-fpm restart
 service nginx start
