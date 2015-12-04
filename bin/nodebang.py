@@ -41,7 +41,7 @@ def main():
         ards = find_arduinos()
         if len(ards) == 0:
             print "(!!!) Couldn't find any Arduino. Please plug one to continue."
-            #sys.exit(2)
+            sys.exit(2)
         else:
             devard = ards[0]  # get first found
             print "Opening arduino at", devard
