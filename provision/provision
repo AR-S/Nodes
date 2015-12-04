@@ -2,7 +2,7 @@
 
 # make sure this script is run by root only
 if [ "$(id -u)" != "0" ]; then
-	fatal "This script must be run as root"
+	echo "This script must be run as root"
 	exit 1
 fi
 
