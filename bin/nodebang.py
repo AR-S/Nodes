@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+## Part of interactive installation AR.S "Nodes"
+## (cc) 2015 Luis Rodil-Fernandez <root@derfunke.net>
+## (cc) 2015 Hrvoje Hirsl
+
 import time, sys
 import serial
 import random
