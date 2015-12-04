@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import time, sys
 import serial
 import random

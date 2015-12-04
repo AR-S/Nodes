@@ -28,7 +28,7 @@ service nginx stop
 unlink /etc/nginx/sites-enabled/default
 
 echo "Configuring default site..."
-install -v -C --owner=root --mode=u+rwx ../bin/nodebang.py /usr/local/bin/nodebang
+install -v -C --owner=root --mode=uga+rwx ../bin/nodebang.py /usr/local/bin/nodebang
 install -v -C --mode=u+rw etc/nginx/butttton.conf /etc/nginx/sites-available/butttton
 
 echo "Enable 'butttton' site online..."
