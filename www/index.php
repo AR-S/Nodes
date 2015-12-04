@@ -27,8 +27,9 @@ if( ! empty($_SERVER['HTTP_X_REQUESTED_WITH']) )
 	}
 }
 
-function use_token( $t )
+function use_token( $token )
 {
+	$found = false;
 	$filename = 'tokens.php';
 
 	if( ! @file_exists($filename) )	{
@@ -55,6 +56,8 @@ function use_token( $t )
 	{
 		if( $line !== $token ) {
 			fwrite($temphandle, $line);
+		} else {
+			$found = true;
 		}
 	}
 
@@ -64,7 +67,7 @@ function use_token( $t )
 	unlink($filename);
 	rename($tempfilename, $filename);
 
-	return true;
+	return $found;
 }
 
 function create_token()
