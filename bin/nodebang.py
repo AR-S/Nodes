@@ -43,7 +43,7 @@ def main():
             ard = serial.Serial(devard, 57600)
 
         try:
-            cb_bell('', '', [11, 1], '') # bang node 11
+            node_bang('', '', [11, 1], '') # bang node 11
             time.sleep(0.5)
         except Exception, e:
             print(traceback.format_exc())
