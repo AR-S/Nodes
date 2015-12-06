@@ -17,7 +17,7 @@ ard = None
 index = 0
 
 def find_arduinos():
-    return glob.glob('/dev/cu.wchusb*') + glob.glob('/dev/tty.usbserial-*')
+    return glob.glob('/dev/cu.wchusb*') + glob.glob('/dev/tty.usbserial-*') + glob.glob('/dev/ttyUSB*')
 
 def node_bang(addr, tags, stuff, source):
     """ Handle bell message from eternal controller """
@@ -50,6 +50,7 @@ def main():
         try:
             node_bang('', '', [11, 1], '') # bang node 11
             time.sleep(0.5)
+            node_bang('', '', [11, 0], '') # bang node 11
         except Exception, e:
             print(traceback.format_exc())
             pass
