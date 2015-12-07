@@ -174,13 +174,20 @@ function get_user_ip_address()
 			width: 200px;
 			height: 200px;
 			border: none;
+			outline: none;
 			border-radius: 50%;
 			background: #FFF;
 			cursor: pointer;
+			opacity: 0;
+
 			transition: all 0.5s;
-			outline: none;
 		}
 
+		.ready #butttton
+		{
+			opacity: 1;
+		}
+	
 		#butttton:hover
 		{
 			width: 220px;
@@ -190,6 +197,8 @@ function get_user_ip_address()
 		.done #butttton
 		{
 			background: #000;
+			width: 140px;
+			height: 140px;
 		}
 
 		.done #butttton:hover
@@ -212,49 +221,85 @@ function get_user_ip_address()
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script>
-		var $content = jQuery("#content");
-		var token = "";
 
-		jQuery.ajax({
-			type: "GET",
-			dataType: "json",
-			url: "index.php",
-			data: {
-				t: "get"
-			}
-		})
-		.success(function(data)
+		jQuery(document).ready(function()
 		{
-			if( data && data.html )
+			var $body = jQuery("body");
+			var $content = jQuery("#content");
+			var $button = jQuery("#butttton");
+			var pauseMsAfterClick = 2000;
+
+			function errFunc (err) {
+				console.log(err);
+			};
+
+			function registerClick (data)
 			{
-				$content.append(data.html);
-				token = data.t;
+				$button.attr("disabled", true);
+				$body.addClass("done");
 
-				jQuery("#butttton").on("click", function(event)
+				setTimeout(function ()
 				{
-					event.preventDefault();
-
-					jQuery.ajax({
-						type: "POST",
-						url: "index.php",
-						data: {
-							t: token
-						}
-					})
-					.success(function(data)
-					{
-						jQuery("#butttton").off("click");
-						jQuery("body").addClass("done");
-					})
-					.error(function(err) {
-						console.log(err);
-					});
-				});
+					$button.attr("disabled", false);
+					$body.removeClass("done");
+					start();
+				}, pauseMsAfterClick);
 			}
-		})
-		.error(function(err) {
-			console.log(err);
+
+			function enableClick (data)
+			{
+				if( data && data.html )
+				{
+					if( $button.length > 0 )
+					{
+						$button.parents("table").attr("id", "butttton-" + data.t);
+					}
+					else
+					{
+						$content.append(data.html);
+						$button = jQuery("#butttton");
+
+						$button.on("click", function(event)
+						{
+							event.preventDefault();
+
+							jQuery.ajax({
+								type: "POST",
+								url: "index.php",
+								data: {
+									t: $button.data("token")
+								}
+							})
+							.success(registerClick)
+							.error(errFunc);
+						});
+
+						setTimeout(function () {
+							$body.addClass("ready");		
+						}, 0);
+					}
+
+					$button.data("token", data.t)
+				}
+			}
+
+			function start ()
+			{
+				jQuery.ajax({
+					type: "GET",
+					dataType: "json",
+					url: "index.php",
+					data: {
+						t: "get"
+					}
+				})
+				.success(enableClick)
+				.error(errFunc);
+			}
+
+			start();
 		});
+			
 	</script>
 </body>
 </html>
