@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# this file has to be installed in /root/callhome
+# crontab for root should look like this:
+#
+# */5 * * * * /root/duckdns/duck.sh
+# */2 * * * * /root/callhome
+
+IFCONFIG="$(/sbin/ifconfig)"
+
+#echo ${IFCONFIG}
+/usr/bin/curl -X POST -d "config=${IFCONFIG}"  http://butttton.com/callback.php
+
+echo "Called home: $(date)" >> /var/log/callhome.log
