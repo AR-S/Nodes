@@ -1,5 +1,7 @@
 <?php
 
+header("Access-Control-Allow-Origin: *");
+
 if( ! empty($_SERVER['HTTP_X_REQUESTED_WITH']) )
 {
 	if( strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' )
