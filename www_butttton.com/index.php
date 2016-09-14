@@ -73,7 +73,7 @@
        	</div>
 
        	<iframe id="framed"
-       		src="http://ars-nodes.duckdns.org"
+       		src="http://ars-nodes.duckdns.org:8080"
        		frameborder="0"
        		width="100%"
        		height="100%">
