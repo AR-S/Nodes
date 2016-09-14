@@ -1,6 +1,7 @@
 #!/bin/env python
 
-# To run: fab deploy
+# To run: fab deploy -I
+# then enter password manually
 import os
 from fabric.api import cd, env, run, put, get
 from fabric.contrib.files import exists
